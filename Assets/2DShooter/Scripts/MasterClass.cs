@@ -4,13 +4,19 @@ using UnityEngine;
 using MultiplayerSystem;
 using UISystem;
 using Commons;
+using PlayerSystem;
 
-namespace MasterClass
+namespace MasterSystem
 {
     public class MasterClass : Singleton<MasterClass>
     {
         [SerializeField]
         private UIView uIView;
+        [SerializeField]
+        private PlayerView playerView;
+
+        public GameObject GetPlayerPrefab { get { return playerView.gameObject; } }
+
 
         IMultiplayer multiplayer;
         IUIService uiService;

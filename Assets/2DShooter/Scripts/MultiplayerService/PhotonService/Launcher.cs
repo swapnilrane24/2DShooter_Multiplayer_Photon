@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using MasterSystem;
 
 namespace MultiplayerSystem
 {
@@ -12,7 +13,11 @@ namespace MultiplayerSystem
         [SerializeField][Tooltip("Max number of player")]
         byte maxPlayers = 4;
 
+        [SerializeField] private Vector3 spawnPos;
+
         MultiplayerService multiplayerService;
+
+        int playerCount = 0;
 
         public void ConnectPhoton(MultiplayerService multiplayerService)
         {
@@ -61,6 +66,13 @@ namespace MultiplayerSystem
         {
             multiplayerService.JoinedRoomEvent();
             Debug.Log("[Launcher] JoinRoom Photon");
+            GameObject player = MasterClass.Instance.GetPlayerPrefab;
+
+            if (playerCount > 0)
+                spawnPos = -spawnPos;
+
+            PhotonNetwork.Instantiate(player.name, spawnPos, Quaternion.identity, 0);
+            playerCount++;
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
