@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using WeaponSystem;
+using Photon.Pun;
 
 namespace PlayerSystem
 {
@@ -14,7 +16,7 @@ namespace PlayerSystem
         private Text playerName;
 
         [SerializeField]
-        private GameObject playerCamera;
+        private GameObject playerCamera, bulletPrefab, shotPos;
 
         private Rigidbody2D myBody;
         private Vector3 smoothMovement;
@@ -35,15 +37,27 @@ namespace PlayerSystem
         {
             if(pv.IsMine)
             {
-                WriteMovement();
+                Movement();
+                if(Input.GetMouseButtonDown(0))
+                {
+                    SpawnBullet();
+                }
             }
+
+
             //else
             //{
             //    ReadMovement();
             //}
         }
 
-        void WriteMovement()
+        void SpawnBullet()
+        {
+            GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, shotPos.transform.position, Quaternion.identity, 0);
+            bullet.GetComponent<BulletView>().Shoot(Vector3.right);
+        }
+
+        void Movement()
         {
             float valH = Input.GetAxis("Horizontal");
             myBody.velocity = new Vector2(valH, myBody.velocity.y);
